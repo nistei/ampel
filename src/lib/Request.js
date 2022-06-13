@@ -1,5 +1,4 @@
 import http from 'http';
-import Monitoring from '../monitoring';
 import ExponentialRetry from '../utils/exponentialRetry';
 import uniqueId from '../utils/uniqueId';
 
@@ -21,7 +20,6 @@ export default class Request {
   dispatch() {
     this._free();
     console.log(this._log(`Dispatching request to backend server ${this.server.formatted}.`));
-    Monitoring.report('outbound', `upstream=${this.server.formatted},method={${this.options.method}},path=${this.options.path}`);
     try {
       this.req = http.request(this.options, this._handleResponse.bind(this));
       this.req.setTimeout(DEFAULT_TIMEOUT_IN_MS);
@@ -70,7 +68,7 @@ export default class Request {
   abort () {
     this.aborted = true;
     if (this.req) {
-      this.req.abort();
+      this.req.destroy();
     }
     this._destroy();
   }
@@ -85,7 +83,6 @@ export default class Request {
 
   _handleResponse (res) {
     this.res = res;
-    res.setEncoding('utf8');
     if (this.onResponse) {
       this.onResponse(this);
     }
@@ -97,7 +94,7 @@ export default class Request {
 
   _handleTimeoutReached () {
     if (this.req){
-      this.req.abort();
+      this.req.destroy();
     }
   }
 
@@ -166,6 +163,6 @@ export default class Request {
 
   _log (message) {
     const now = new Date();
-    return `[${now} Id: ${this.id}] ` + message;
+    return `[${now.toISOString()} Id: ${this.id}] ` + message;
   }
 }

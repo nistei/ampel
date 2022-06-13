@@ -1,5 +1,4 @@
 import Request from './Request';
-import Monitoring from '../monitoring';
 import uniqueId from '../utils/uniqueId';
 import { getRemoteAddress, getXFF } from '../utils';
 
@@ -16,8 +15,7 @@ export default class Swarm {
   }
 
   dispatch () {
-    console.log(this._log('Dispatching a Swarm request...'));
-    Monitoring.report('inbound', `method={${this.req.method}},path=${this.req.url}`);
+    console.log(this._log(`Dispatching ${this.req.method} Swarm request...`));
     const _options = Object.assign({}, {
       protocol: 'http:',
       method: this.req.method,
@@ -45,7 +43,7 @@ export default class Swarm {
       req.consume();
       return;
     }
-    if (code !== 201) {
+    if (code < 200 && code > 299) {
       console.log(this._log(`Received status code ${code} from one of the upstream backends (Id: ${id}). Retrying...`));
       req.retry();
       return;
@@ -64,7 +62,7 @@ export default class Swarm {
       this.res.end('502 Bad Gateway');
       for (let i = 0; i < this.proxies.length; i++) {
         this.proxies[i].abort();
-      };
+      }
     }
   }
 

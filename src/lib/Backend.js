@@ -1,4 +1,3 @@
-import URL from 'url';
 export default class Backend {
   constructor (options) {
     if (!options || options.constructor!== Object) {
