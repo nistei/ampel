@@ -7,18 +7,15 @@
     "start": "node dist/server.js",
     "start:dev": "nodemon src/server.js --exec babel-node",
     "start:debug": "nodemon src/server.js --exec 'babel-node --inspect=5858'",
-    "build": "babel src -d dist",
-    "test": "jest"
+    "build": "babel src -d dist"
   },
   "author": "Nir Azuelos <nirazuelos@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-jest": "^23.4.0",
     "babel-preset-env": "^1.7.0",
-    "jest": "^23.4.1",
-    "nodemon": "^1.18.3",
-    "regenerator-runtime": "^0.12.0"
+    "nodemon": "^ 2.0.16",
+    "regenerator-runtime": "^0.13.9"
   }
 }

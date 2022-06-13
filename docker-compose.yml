@@ -3,14 +3,9 @@ services:
     image: kennethreitz/httpbin
     container_name: httpbin-a
     ports:
-      - 6001:80
+      - 32001:80
   httpbin-b:
     image: kennethreitz/httpbin
     container_name: httpbin-b
     ports:
-      - 6002:80
-  httpbin-c:
-    image: kennethreitz/httpbin
-    container_name: httpbin-c
-    ports:
-      - 6003:80
+      - 32002:80
